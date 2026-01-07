@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Viper Tweaks - Interactive Menu</title>
+<meta name="description" content="Viper Tweaks - Ultimate FPS & Low Process Menu">
+<style>
+body {
+    margin: 0;
+    background: black;
+    font-family: monospace;
+    overflow: hidden;
+}
+
+/* INTRO SCREEN */
+#intro {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #00bfff; /* light blue */
+    font-size: 64px;
+    letter-spacing: 6px;
+    opacity: 0;
+    animation: fadeInOut 7s forwards;
+    z-index: 10;
+    text-shadow: 0 0 20px #00bfff;
+}
+
+/* MAIN CONTENT */
+#main {
+    display: none;
+    color: #00ff00;
+    padding: 20px;
+}
+
+/* MENU BOXES */
+.menu {
+    width: 80%;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    text-align: center;
+}
+
+.button-box {
+    border: 1px solid #00ff00;
+    padding: 15px;
+    cursor: pointer;
+    user-select: none;
+    transition: 0.2s;
+    font-size: 16px;
+}
+
+.button-box.on {
+    background: #00ff00;
+    color: black;
+}
+
+.button-box.off {
+    background: #ff0000;
+    color: black;
+}
+
+/* CONSOLE OUTPUT */
+#console {
+    border: 1px solid #00ff00;
+    padding: 15px;
+    margin-top: 20px;
+    height: 250px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    font-size: 14px;
+}
+
+/* Animations */
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    15% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro">VIPER</div>
+
+<!-- MAIN MENU -->
+<div id="main">
+    <h2 style="text-align:center;">VIPER TWEAKS – INTERACTIVE MENU</h2>
+    <div class="menu">
+        <div class="button-box off" id="reduceProc" data-label="Reduce Processes (A)">Reduce Processes (A)</div>
+        <div class="button-box off" id="reducePing" data-label="Reduce Ping (E)">Reduce Ping (E)</div>
+        <div class="button-box off" id="autoApply">Auto Apply on Startup</div>
+        <div class="button-box off" id="maxFPS">Max FPS Mode</div>
+        <div class="button-box off" id="lowBG">Lower Background Apps</div>
+        <div class="button-box off" id="gameMode">Game Mode Optimization</div>
+    </div>
+
+    <div id="console">
+[INFO] Viper Tweaks initialized...
+[INFO] Toggle options above or use keyboard shortcuts (A/E)...
+    </div>
+</div>
+
+<script>
+// Buttons setup
+const consoleBox = document.getElementById("console");
+const buttons = {
+    reduceProc: { el: document.getElementById("reduceProc"), state: false, key: 'a', name: "Reduce Processes" },
+    reducePing: { el: document.getElementById("reducePing"), state: false, key: 'e', name: "Reduce Ping" },
+    autoApply: { el: document.getElementById("autoApply"), state: false, name: "Auto Apply on Startup" },
+    maxFPS: { el: document.getElementById("maxFPS"), state: false, name: "Max FPS Mode" },
+    lowBG: { el: document.getElementById("lowBG"), state: false, name: "Lower Background Apps" },
+    gameMode: { el: document.getElementById("gameMode"), state: false, name: "Game Mode Optimization" }
+};
+
+// Log function
+function log(text){
+    consoleBox.textContent += "\n" + text;
+    consoleBox.scrollTop = consoleBox.scrollHeight;
+}
+
+// Toggle function
+function toggleButton(btn){
+    btn.state = !btn.state;
+    btn.el.className = btn.state ? 'button-box on' : 'button-box off';
+    log(`[SYSTEM] ${btn.name} ${btn.state ? 'ENABLED' : 'DISABLED'}`);
+}
+
+// Assign click events
+for (let key in buttons){
+    buttons[key].el.addEventListener('click', () => toggleButton(buttons[key]));
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    for (let key in buttons){
+        if(buttons[key].key && e.key.toLowerCase() === buttons[key].key){
+            toggleButton(buttons[key]);
+        }
+    }
+});
+
+// Intro timer (7 seconds)
+setTimeout(() => {
+    document.getElementById("intro").style.display = "none";
+    document.getElementById("main").style.display = "block";
+}, 7000);
+</script>
+
+</body>
+</html>
